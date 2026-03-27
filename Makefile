@@ -9,8 +9,8 @@ DOCKER_IMAGE  := $(SERVICE_NAME):$(VERSION)
 ## build: 编译服务二进制
 build: tidy
 	@mkdir -p bin
-	CGO_ENABLED=0 go build -ldflags="-s -w -X main.serviceVersion=$(VERSION)" \
-		-o $(BINARY) ./cmd/
+	CGO_ENABLED=1 go build -ldflags="-s -w -X main.serviceVersion=266420a" \
+            -o ./bin/edge-gateway ./cmd/
 
 ## test: 运行单元测试（不含集成测试）
 test:

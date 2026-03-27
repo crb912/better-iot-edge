@@ -37,7 +37,7 @@ func NewDriver() *Driver {
 
 func (d *Driver) Initialize(sdk interfaces.DeviceServiceSDK) error {
 	d.sdk = sdk
-	sdk.LoggingClient().Info("ModbusDriver initialized")
+	sdk.GetLoggingClient().Info("ModbusDriver initialized")
 	return nil
 }
 
@@ -54,7 +54,7 @@ func (d *Driver) Stop(_ bool) error {
 		d.clients.Delete(key)
 		return true
 	})
-	d.sdk.LoggingClient().Info("ModbusDriver stopped")
+	d.sdk.GetLoggingClient().Info("ModbusDriver stopped")
 	return nil
 }
 
@@ -195,7 +195,7 @@ func (d *Driver) writeResource(entry *clientEntry, req sdkModels.CommandRequest,
 // ---------- 设备回调 ----------
 
 func (d *Driver) AddDevice(deviceName string, protocols map[string]models.ProtocolProperties, _ models.AdminState) error {
-	d.sdk.LoggingClient().Infof("ModbusDriver: device added: %s", deviceName)
+	d.sdk.GetLoggingClient().Infof("ModbusDriver: device added: %s", deviceName)
 	props, err := extractModbusProps(protocols)
 	if err != nil {
 		return err

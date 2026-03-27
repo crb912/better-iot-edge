@@ -68,14 +68,14 @@ func (d *Driver) Initialize(sdk interfaces.DeviceServiceSDK) error {
 	}
 
 	d.client = &http.Client{Timeout: d.timeout}
-	sdk.LoggingClient().Infof("HttpDriver initialized: timeout=%s retries=%d", d.timeout, d.retries)
+	sdk.GetLoggingClient().Infof("HttpDriver initialized: timeout=%s retries=%d", d.timeout, d.retries)
 	return nil
 }
 
 func (d *Driver) Start() error { return nil }
 
 func (d *Driver) Stop(_ bool) error {
-	d.sdk.LoggingClient().Info("HttpDriver stopped")
+	d.sdk.GetLoggingClient().Info("HttpDriver stopped")
 	return nil
 }
 
@@ -121,7 +121,7 @@ func (d *Driver) readResource(deviceName, baseURL string, req sdkModels.CommandR
 			break
 		}
 		if attempt < d.retries {
-			d.sdk.LoggingClient().Warnf("HttpDriver: device %s attempt %d/%d failed: %v", deviceName, attempt+1, d.retries, err)
+			d.sdk.GetLoggingClient().Warnf("HttpDriver: device %s attempt %d/%d failed: %v", deviceName, attempt+1, d.retries, err)
 			time.Sleep(500 * time.Millisecond)
 		}
 	}
@@ -215,17 +215,17 @@ func (d *Driver) writeResource(deviceName, baseURL string, req sdkModels.Command
 // ---------- 设备回调 ----------
 
 func (d *Driver) AddDevice(deviceName string, _ map[string]models.ProtocolProperties, _ models.AdminState) error {
-	d.sdk.LoggingClient().Infof("HttpDriver: device added: %s", deviceName)
+	d.sdk.GetLoggingClient().Infof("HttpDriver: device added: %s", deviceName)
 	return nil
 }
 
 func (d *Driver) UpdateDevice(deviceName string, _ map[string]models.ProtocolProperties, _ models.AdminState) error {
-	d.sdk.LoggingClient().Infof("HttpDriver: device updated: %s", deviceName)
+	d.sdk.GetLoggingClient().Infof("HttpDriver: device updated: %s", deviceName)
 	return nil
 }
 
 func (d *Driver) RemoveDevice(deviceName string, _ map[string]models.ProtocolProperties) error {
-	d.sdk.LoggingClient().Infof("HttpDriver: device removed: %s", deviceName)
+	d.sdk.GetLoggingClient().Infof("HttpDriver: device removed: %s", deviceName)
 	return nil
 }
 

@@ -53,12 +53,12 @@ func (c *CompositeDriver) Initialize(sdk interfaces.DeviceServiceSDK) error {
 
 	// v2 的 AddCustomRoute 签名：(route string, handler http.HandlerFunc, methods ...string)
 	// 没有 v3 的 interfaces.Authenticated 参数
-	alarmHandler := handler.NewAlarmHandler(sdk.LoggingClient())
-	if err := sdk.AddCustomRoute("/api/alarm", alarmHandler.HandleAlarm, http.MethodPost); err != nil {
+	alarmHandler := handler.NewAlarmHandler(sdk.GetLoggingClient())
+	if err := sdk.AddRoute("/api/alarm", alarmHandler.HandleAlarm, http.MethodPost); err != nil {
 		return fmt.Errorf("register /api/alarm route: %w", err)
 	}
 
-	sdk.LoggingClient().Info("custom route registered: POST /api/alarm")
+	sdk.GetLoggingClient().Info("custom route registered: POST /api/alarm")
 	return nil
 }
 
