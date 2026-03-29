@@ -3,6 +3,7 @@
 package main
 
 import (
+	"better-iot-edge/config"
 	"better-iot-edge/internal/driver"
 	httpdriver "better-iot-edge/internal/driver/http"
 	modbusdriver "better-iot-edge/internal/driver/modbus"
@@ -14,6 +15,16 @@ const (
 	serviceName    = "edge-gateway"
 	serviceVersion = "1.0.0"
 )
+
+func test() {
+	var devices []Device
+	err := config.Unmarshal(confg.Modbus, &devices, resCheck)
+	_ = config.Unmarshal(confg.SNMP, &devices)
+	err = config.UnmarshalFromfile(pathToMyfile, &devices, resCheck)
+	_ = config.Unmarshal(confg.Modbus, &devices)
+	err = config.MarshalToFile(pathToMyfile, &devices)
+
+}
 
 func main() {
 	modbusDrv := modbusdriver.NewDriver()
