@@ -73,7 +73,7 @@ Device:
 
 # ---------- 协议驱动私有配置 ----------
 # 通过 sdk.DriverConfigs() 读取，key=string, value=string
-[Driver]
+  [Driver]
   # HTTP Driver
   HttpTimeout  = "5s"    # 单次 HTTP 请求超时（Go duration 格式）
   HttpRetries  = "2"     # 失败后重试次数

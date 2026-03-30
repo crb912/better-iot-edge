@@ -3,9 +3,61 @@ package config
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"os"
+	"path/filepath"
 )
+
+// GetDeviceConfigPath builds the exact file path dynamically
+func GetDeviceConfigPath(env Env, p Protocol) string {
+	envFolder, err := getCurrentEnv()
+	if err != nil {
+		fmt.Println("Error getting current environment:", err)
+	}
+	protocolFolder := p.String()
+	fullPath := filepath.Join(baseDir, string(envFolder), protocolFolder, "config.json")
+	return fullPath
+}
+
+func getEnvConfigPath() (string, error) {
+	// Get the current working directory
+	dir, err := os.Getwd()
+	if err != nil {
+		// Handle error
+		fmt.Println("Error getting working directory:", err)
+		return "", err
+	}
+	envJsonFilepath := filepath.Join(dir, baseDir, envFilename)
+	return envJsonFilepath, nil
+}
+
+func getCurrentEnv() (Env, error) {
+	envJsonFilepath, err := getEnvConfigPath()
+	if err != nil || "" != envJsonFilepath {
+		return EnvDefault, err
+	}
+	fileData, err := os.ReadFile(envJsonFilepath)
+	if err != nil {
+		return EnvDefault, err
+	}
+	var envConfig EnvJson
+	err = json.Unmarshal(fileData, &envConfig)
+	if err != nil {
+		return EnvDefault, err
+	}
+	if envConfig.CurrentEnv == "prod" {
+		return EnvProd, err
+	} else if envConfig.CurrentEnv == "test" {
+		return EnvTest, nil
+	}
+	return EnvDefault, nil
+}
+
+func GetDevicesList(p Protocol) string {
+	fmt.Println("GetDevicesList: []: ", p)
+	return ""
+}
 
 // Format defines the source file type.
 type Format string
